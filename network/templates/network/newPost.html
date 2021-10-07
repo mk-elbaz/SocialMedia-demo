@@ -1,0 +1,14 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block title %}New Post{% endblock %}
+{% block body %}
+    <div class="form-control">
+        <form action="{% url 'newPost' %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input id="" type="submit" value="Save Post" style="margin-top: 15px;" class="btn btn-primary">
+        </form>
+    </div>
+
+
+{% endblock %}

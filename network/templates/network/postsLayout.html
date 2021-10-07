@@ -1,0 +1,71 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+{%block inside%}
+{%endblock%}
+<div id="allPostsDiv">
+    {% for post in posts %}
+    <div style="margin-bottom: 15px; display: grid; place-items: center; ">
+    <div class="card text-center w-75"  data-post_id="{{ post.id }}">
+        <h5 class="card-header"><a href="{% url 'viewProfile' post.author.id %}">{{post.author.username}}</a></h5>
+        <div class="card-text" id="textDiv" >{{post.text}}</div>  
+        <div class="blockquote-footer">{{post.timestamp}}</div>
+        {% if post.author == request.user %}
+        <a href="" class="editLink card-link"> Edit Post </a>
+        {% endif %}
+        <span>
+        {% if request.user.is_authenticated %}
+            {% if request.user in post.likes.all %}                   
+                <a style="cursor: pointer; color: tomato;" class="fas fa-heart like-link">{{ post.getLikesCount }}</a>
+            {% else %}
+                <a style="cursor: pointer; color: tomato;" class="far fa-heart like-link">{{ post.getLikesCount }}</a>
+            {% endif %}
+        {% else %}        
+                <i style="cursor: pointer; color: tomato;" class="far fa-heart like-link">{{ post.getLikesCount }}</i>
+        {% endif %}
+        </span>
+    </div>
+</div>
+    
+
+    {% empty %}
+        No posts here yet.
+    
+{% endfor %}
+<div class="pagination justify-content-center" style="margin-top: 20px;">
+    <span class="step-links justify-content-center">
+        <nav aria-label="post pagination">
+            <ul class="pagination justify-content-center">
+                {% if posts.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">previous</a></li>
+                {% endif %}
+
+                {% if posts.has_previous or posts.has_next %}
+                    {% for page in numOfPages %}
+                    <!-- https://www.npmjs.com/package/slugify -->
+                        {% if forloop.counter|slugify == currentPage|slugify %}
+                            <li class="page-item active"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}
+                                <span class="sr-only">(current)</span>
+                            </a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {% if posts.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">last</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </span>
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+    <script src="{% static 'network/like.js' %}"></script>
+{% endblock %}

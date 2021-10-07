@@ -1,0 +1,23 @@
+{% extends "network/postsLayout.html" %}
+{% block title %}{{ username }}'s profile{% endblock %}
+{% block inside %}
+<div style="display: grid; place-items: center; ">
+        <h2 class="card bg-light border-info mb-3 w-50" style="text-align: center; margin-top: 15px;">{{ username }}</h2>
+    
+    {%if request.user != username%}
+        {% if following %}
+            <a class="btn btn-danger" href="{% url 'changeFollow' username.id %}" style=" margin-bottom: 15px;">UnFollow</a>
+        {% else %}
+            <a class="btn btn-primary" href="{% url 'changeFollow' username.id %}" style=" margin-bottom: 15px;">Follow</a>
+        {%endif%}
+    {%endif%}
+</div>
+<div class="row gx-5">
+    <span class="col gx-5" style="align-content: center;">
+    <h4 class="p-3 border-info bg-light" style="text-align: center;">Followers: {{followersNum}}</h4>
+    </span>
+    <span class="col gx-5" style="align-content: center;">
+    <h4 class="p-3 border-info bg-light" style="text-align: center;">Following: {{followingNum}}</h4>
+    </span>
+</div>    
+{% endblock %}
