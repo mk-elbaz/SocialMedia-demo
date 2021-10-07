@@ -1,2 +1,2 @@
 # SocialMedia-demo
- A twitter-inspired social media app made with Django
+ A twitter-inspired social media website made with Django
